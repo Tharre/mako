@@ -178,6 +178,14 @@ static char *resolve_icon(struct mako_notification *notif) {
 				++relative_path;
 			}
 
+			if (!strncmp(relative_path, "scalable", sizeof("scalable")-1)
+			    || !strncmp(relative_path, "symbolic", sizeof("symbolic")-1)) {
+				// Assume icon is scalable
+				free(icon_path);
+				icon_path = strdup(icon_glob.gl_pathv[i]);
+				break;
+			}
+
 			errno = 0;
 			int32_t icon_size = strtol(relative_path, NULL, 10);
 			if (errno || icon_size == 0) {
